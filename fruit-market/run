@@ -195,7 +195,7 @@ def level1():
     # subprocess.call(f"/bin/ls -la {flag_file}")
     # os.system(f"/bin/ls -la {flag_file}")
 
-def level4():
+def level2():
     """
     In this challenge you have to work with the SETUID bit.
 
@@ -211,10 +211,10 @@ def level4():
     os.chmod("/bin/less", 0o4755)
 
     # print("After:")
-    subprocess.call(f"/bin/ls -la /bin/less")
+    subprocess.call(["/bin/ls", "-la", "/bin/less"])
     # os.system(f"/bin/ls -la /bin/less")
 
-def level6():
+def level3():
     """
     In this challenge you have to work with UNIX permissions on the flag, again!.
 
@@ -231,8 +231,8 @@ def level6():
     new_password = ''.join(random.choices(string.ascii_lowercase, k=8))
 
     # create group with password
-    subprocess.call(f"/usr/sbin/groupadd -p $(/usr/bin/openssl passwd -1 {new_password}) {new_group}")
-    # os.system(f"/usr/sbin/groupadd -p $(/usr/bin/openssl passwd -1 {new_password}) {new_group}")
+    hashed = subprocess.run(["/usr/bin/openssl", "passwd", "-1", new_password], capture_output=True, text=True).stdout.strip()
+    subprocess.run(["/usr/sbin/groupadd", "-p", hashed, new_group], check=True)
 
     shutil.chown(flag_file, group=new_group)
     os.chmod(flag_file, 0o040)
@@ -243,11 +243,13 @@ def level6():
 
     print(f"The password for {new_group} is: {new_password}")
 
-def level12():
+def level4():
     """
-    In this challenge you will work understand how UNIX permissions for directories work with multiple users.
+    In this challenge you have to work with UNIX permissions for directories, with multiple users.
 
-    You'll be given access to various user accounts, use su to switch between them.
+    You'll be given access to various user accounts, switch between them.
+    
+    Solving this challenge will earn you a Guava.
     """
 
     outer_temp_file = tempfile.mkdtemp(dir="/tmp")
@@ -273,7 +275,7 @@ def level12():
     print("A copy of the flag has been placed somewhere in /tmp:")
     os.system(f"/bin/ls -la /tmp")
 
-def level16():
+def level5():
     """
     In this challenge you'll be answering questions about the category-based Bell–LaPadula model of Mandatory Access Control.
 
@@ -286,7 +288,7 @@ def challenge():
     description = textwrap.dedent(challenge_level.__doc__)
 
     print("===== Welcome ! =====")
-    print("In this series of challenges, you will be working with various challenges to earn your delicious fruits.")
+    print("You have to work with various challenges to earn your delicious fruits.")
     print()
     print(description)
     print()
