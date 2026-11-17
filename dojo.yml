@@ -9,21 +9,26 @@ modules:
     challenges:
       - id: apple
         name: Challenge 1 - Apple
-      - id: banana
-        name: Challenge 2 - Banana
-      - id: papaya
-        name: Challenge 3 - Papaya
-      - id: guava
-        name: Challenge 4 - Guava
-      - id: pineapple
-        name: Challenge 5 - Pineapple
       - id: kiwi
-        name: Challenge 6 - Kiwi
+        name: Challenge 2 - Kiwi
+        privileged: true
+      - id: banana
+        name: Challenge 3 - Banana
       - id: mango
-        name: Challenge 7 - Mango
+        name: Challenge 4 - Mango
+        privileged: true
+      - id: papaya
+        name: Challenge 5 - Papaya
       - id: grapes
-        name: Challenge 8 - Grapes
+        name: Challenge 6 - Grapes
+        privileged: true
+      - id: pineapple
+        name: Challenge 7 - Pineapple
       - id: tomato
-        name: Challenge 9 - Tomato
+        name: Challenge 8 - Tomato
+        privileged: true
+      - id: guava
+        name: Challenge 9 - Guava
       - id: dragon-fruit
         name: Challenge 10 - Dragon Fruit
+        privileged: true
