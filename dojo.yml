@@ -4,4 +4,12 @@ type: private
 image: pwncollege/challenge-legacy:latest
 password: diatmt@26
 modules:
-  - id: challenges
+  - id: fruit-market
+    name: Challenges
+    challenges:
+      - id: apple
+        name: Challenge 1
+      - id: banana
+        name: Challenge 2
+      - id: papaya
+        name: Challenge 3

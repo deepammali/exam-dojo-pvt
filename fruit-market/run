@@ -285,7 +285,7 @@ def challenge():
     challenge_level = globals()[f"level{level}"]
     description = textwrap.dedent(challenge_level.__doc__)
 
-    print("===== Welcome to Fruit Market! =====")
+    print("===== Welcome ! =====")
     print("In this series of challenges, you will be working with various challenges to earn your delicious fruits.")
     print()
     print(description)
