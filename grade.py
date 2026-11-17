@@ -1,171 +1,92 @@
-import pandas as pd
+# Grading for the Lab Internal Exam.
+#
+# Edit the settings below, push, and update the dojo. The admin Grades page
+# (/dojo/<dojo>/admin/grades) recalculates every time it loads, so you can
+# change marks after the exam is over.
 
-letter_grades = {
-    "A+": 1.00,
-    "A": 0.93,
-    "A-": 0.90,
-    "B+": 0.88,
-    "B": 0.83,
-    "B-": 0.80,
-    "C+": 0.78,
-    "C": 0.70,
-    "E": 0.00,
+# Marks for solving each challenge, keyed by challenge id from dojo.yml.
+# Solving a challenge earns its full marks. Not solving it earns 0.
+# Starting values follow the question paper: Section A = 1 mark, Section B = 3.
+MARKS = {
+    "apple": 1,         # Q1  Access Control level1
+    "kiwi": 1,          # Q2  Listen
+    "banana": 1,        # Q3  Access Control level4 (SETUID)
+    "mango": 1,         # Q4  Firewall 1
+    "papaya": 1,        # Q5  Access Control level6
+    "grapes": 3,        # Q6  Scan 2
+    "pineapple": 3,     # Q7  Access Control level16 (Bell-LaPadula)
+    "tomato": 3,        # Q8  Sniffing Cookies
+    "guava": 3,         # Q9  Access Control level12
+    "dragon-fruit": 3,  # Q10 Intercept
 }
 
-assignment_starts = {
-    "Challenge": "2025-08-21T16:30:00-07:00",
-}
-
-assignment_deadlines = {
-    "hello": {
-        "Challenges": "2025-08-28T16:30:00-07:00",
-    },
-}
-
-assignment_type_weight = {
-    "Challenges": 1,
-}
-
-late_credit = 0.5
-late_credit_end = None
+MODULE_ID = "fruit-market"
 
 #
-# Grading Logic
+# Grading logic: you shouldn't need to change anything below.
 #
 
-for module, deadlines in assignment_deadlines.items():
-    for assignment_type, deadline in deadlines.items():
-        deadlines[assignment_type] = pd.to_datetime(deadline)
+import datetime
+
+IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30), "IST")
+
+
+def parse_time(value):
+    if not value:
+        return None
+    return datetime.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+
+
+def fmt(value):
+    return f"{value:g}"
 
 
 def grade(data):
-    print(data)
-    print(data['solves'])
-    print(data['modules'])
-    print(data['course'])
     if any(field not in data for field in ["solves", "modules", "course"]):
         return None
 
-    now = pd.Timestamp.now(tz="UTC")
+    first_solve = {}
+    for solve in data["solves"]:
+        if solve["module_id"] != MODULE_ID:
+            continue
+        solved_at = parse_time(solve["timestamp"])
+        challenge_id = solve["challenge_id"]
+        if challenge_id not in first_solve or solved_at < first_solve[challenge_id]:
+            first_solve[challenge_id] = solved_at
 
-    solves_df = pd.DataFrame(data["solves"], columns=["module_id", "challenge_id", "timestamp"]).set_index(["module_id", "challenge_id"])
-    solves_df["timestamp"] = pd.to_datetime(solves_df["timestamp"], format="mixed", utc=True)
+    module = next((m for m in data["modules"] if m["id"] == MODULE_ID), {})
 
-    modules_df = (
-        pd.json_normalize(
-            data["modules"],
-            record_path="challenges",
-            meta=["id", "name", "required", "description"],
-            record_prefix="challenge_",
-            meta_prefix="module_",
-            errors='ignore',
-        )
-        .set_index(["module_id", "challenge_id"])
-        .join(solves_df["timestamp"].rename("solved_timestamp"), how="left")
-    )
-
-    # Do not count optional challenges
-    modules_df = modules_df[modules_df['challenge_required'] == True]
-
-    # Individual deadline extensions can be added in the students.yml file
-    extensions = data["course"].get("student", {}).get("extensions", {})
-
-    assignments_df = (
-        pd.DataFrame([
-            {
-                "module": module,
-                "type": assignment_type,
-                "deadline": assignment_deadline,
-                "start": pd.to_datetime(assignment_starts[module], format="mixed", utc=True),
-                "extension": pd.Timedelta(days=extensions.get(module, 0)),
-                "weight": assignment_type_weight[assignment_type],
-            }
-            for module, deadlines in assignment_deadlines.items()
-            for assignment_type, assignment_deadline in deadlines.items()
-        ])
-        .set_index(["module", "type"])
-    )
-
-    assignments_df = assignments_df[assignments_df['start'] < now]
-    assignment_data = assignments_df.apply(grade_assignment, axis=1, modules_df=modules_df)
-    flat = {
-        f"{module} - {typ}": row.to_dict()
-        for (module, typ), row in assignment_data.iterrows()
-    }
-
-    assignments = format_assignments(flat)
-    total_weight = sum(a['weight'] for a in assignments)
-    assignments_score = sum([a['credit'] * a['weight'] / total_weight for a in assignments])
-
-    overall_letter = next(letter for letter, credit in letter_grades.items() if assignments_score >= credit)
-
-    return {
-        "overall": dict(credit=assignments_score, letter=overall_letter),
-        "assignments": assignments
-    }
-
-
-def grade_assignment(row, modules_df):
-    '''
-    Module grading logic that allows for
-    - Individual deadline extensions
-    - Late credit with configurable cutoff
-    - Assignment weightings
-    '''
-
-    name, assignment_type = row.name
-    module_id = name.lower().replace(' ', '-')
-    res = dict()
-    res['target'] = 0
-    res['credit'] = 0 
-    res['on_time'] = 0
-    res['late'] = 0
-    res['weight'] =  assignment_type_weight[assignment_type]
-
-    credit = 0
-
-    if module_id not in modules_df.index.get_level_values('module_id'):
-        return res
-
-    relevant_chals = modules_df.xs(module_id, level="module_id", drop_level=False)
-    deadline = row.deadline + row.extension
-    on_time = len(relevant_chals[relevant_chals['solved_timestamp'] < deadline])
-    late_solves = relevant_chals[relevant_chals['solved_timestamp'] >= deadline]
-    if late_credit_end:
-        late_solves = late_solves[late_solves['solved_timestamp'] <= late_credit_end]
-    late_count = len(late_solves)
-    target = len(relevant_chals)
-
-    if assignment_type == 'Challenges':
-        credit = on_time / target + late_count / target * late_credit
-
-    res['target'] = target
-    res['credit'] = credit
-    res['on_time'] = on_time
-    res['late'] = late_count
-    res['deadline'] = deadline
-    res['weight'] =  assignment_type_weight[assignment_type]
-
-    return pd.Series(res)
-
-def format_assignments(flat_dat):
-    '''
-    Formats data to fit the grades page template.
-    '''
     assignments = []
+    earned_total = 0
+    max_total = 0
+    for challenge in module.get("challenges", []):
+        challenge_id = challenge["id"]
+        max_marks = MARKS.get(challenge_id, 0)
+        max_total += max_marks
 
-    for name, vals in flat_dat.items():
-        if vals['late'] > 0:
-            prog_string = f"{vals['on_time']:.0f} + ({vals['late']:.0f}) / {vals['target']:.0f}"
+        solved_at = first_solve.get(challenge_id)
+        earned = 0
+        if solved_at is None:
+            status = "Not solved"
         else:
-            prog_string = f"{vals['on_time']:.0f} / {vals['target']:.0f}"
+            earned = max_marks
+            status = f"Solved at {solved_at.astimezone(IST):%H:%M} IST"
+        earned_total += earned
 
+        # Key order matters: the admin "Download CSV" button reads these
+        # five columns by position (name, deadline, weight, progress, credit).
         assignments.append({
-          "name": name,
-          "deadline": str(vals['deadline']),
-          "weight": int(vals['weight']),
-          "progress": prog_string,
-          "credit": vals['credit'],
+            "name": challenge.get("name", challenge_id),
+            "deadline": "-",
+            "marks": max_marks,
+            "progress": f"{status}: {fmt(earned)}/{fmt(max_marks)}",
+            "credit": earned / max_marks if max_marks else 0,
         })
 
-    return assignments
+    return {
+        "overall": {
+            "credit": earned_total / max_total if max_total else 0,
+            "letter": f"{fmt(earned_total)} / {fmt(max_total)} marks",
+        },
+        "assignments": assignments,
+    }

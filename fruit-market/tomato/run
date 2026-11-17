@@ -1,6 +1,7 @@
 #!/usr/bin/exec-suid --real -- /usr/local/bin/python -I
 
 import requests
+from requests.exceptions import RequestException
 import random
 import psutil
 import string

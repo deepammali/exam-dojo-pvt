@@ -1,1 +1,1 @@
-Complete all challenges and submit flags to claim full marks.
+Solve each challenge and submit its flag. Each challenge carries its own marks.

@@ -34,7 +34,7 @@ class ServerHost(Host):
                     last_connected_time.value = time.time()
                 self.request.recv(1024)
 
-        with socketserver.ForkingTCPServer(("0.0.0.0", 31337), ForkingTCPHandler) as server:
+        with socketserver.ForkingTCPServer(("0.0.0.0", 6081), ForkingTCPHandler) as server:
             server.serve_forever()
 
 class ClientHost(Host):
@@ -42,7 +42,7 @@ class ClientHost(Host):
         while True:
             time.sleep(1)
             try:
-                with socket.create_connection(("10.0.0.1", 31337)) as client_socket:
+                with socket.create_connection(("10.0.0.1", 6081)) as client_socket:
                     client_socket.sendall(b"Hello, World!\n")
             except (OSError, ConnectionError, TimeoutError):
                 continue

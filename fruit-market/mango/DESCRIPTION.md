@@ -1,9 +1,7 @@
-Your host at 10.0.0.1 is receiving traffic on port `31337`; block that traffic.
+**Objective:** Stop incoming traffic to a port so that the flag is printed.
 
-___
+1. Run `/challenge/run`. Your shell moves into the challenge network as host `10.0.0.1`. Type `exit` to leave it.
+2. A service on `10.0.0.1` listens on TCP port `6081`. The host `10.0.0.2` connects to it every second.
+3. Make sure no traffic from the network reaches TCP port `6081` on `10.0.0.1`. Once the service sees no connection for about 2 seconds, the flag is printed in this terminal.
 
-In this challenge, you'll control the flow of data on a port. The title gives you a hint as to how — use a firewall!
-
-A firewall secures a host by inspecting network traffic and enforcing rules to control it. A common tool for configuring these rules is [iptables](https://linux.die.net/man/8/iptables).
-
-Note: Rule order and priority matter. You can list the current configuration to understand how packets are processed and debug your setup.
+**Rules:** Do not stop, kill, or change the service listening on port `6081`. The block must be applied on `10.0.0.1`.

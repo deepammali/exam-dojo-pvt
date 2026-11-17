@@ -16,7 +16,7 @@ class ClientHost(Host):
             time.sleep(1)
             try:
                 client_socket = socket.socket()
-                client_socket.connect(("10.0.0.3", 31337))
+                client_socket.connect(("10.0.0.3", 5309))
                 client_socket.sendall(flag.encode())
                 client_socket.close()
             except (OSError, ConnectionError, TimeoutError):
@@ -25,7 +25,7 @@ class ClientHost(Host):
 class ServerHost(Host):
     def entrypoint(self):
         server_socket = socket.socket()
-        server_socket.bind(("0.0.0.0", 31337))
+        server_socket.bind(("0.0.0.0", 5309))
         server_socket.listen()
         while True:
             try:

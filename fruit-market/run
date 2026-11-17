@@ -179,8 +179,8 @@ def mac_challenge(num_questions, timeout_sec, num_levels=None, num_categories=No
 
 def level1():
     """
-    In this challenge you have to work with UNIX permissions on the flag.
-    Solving this challenge will earn you an apple, because an apple a day keeps the doctor away.
+    Objective: read /flag.
+    The ownership and permissions of /flag have been changed.
     """
 
     # print("Before:")
@@ -196,9 +196,9 @@ def level1():
 
 def level2():
     """
-    In this challenge you have to work with the SETUID bit.
-    What if /bin/less had the SETUID bit set?
-    Solving this challenge will earn you a banana, with radioactive K-40.
+    Objective: read /flag.
+    The SETUID bit has been set on one program already installed on this system.
+    /flag is readable only by root.
     """
 
     # print("Before:")
@@ -208,14 +208,14 @@ def level2():
     os.chmod("/bin/less", 0o4755)
 
     # print("After:")
-    subprocess.call(["/bin/ls", "-la", "/bin/less"])
+    # subprocess.call(["/bin/ls", "-la", "/bin/less"])
     # os.system(f"/bin/ls -la /bin/less")
 
 def level3():
     """
-    In this challenge you have to work with UNIX permissions on the flag, again!.
-    The flag file is owned by root and a new group.
-    Solving this challenge will earn you a Papaya.
+    Objective: read /flag.
+    A new group now owns /flag and the file's permissions have been changed.
+    The group's password is printed below.
     """
 
     # print("Before:")
@@ -240,9 +240,9 @@ def level3():
 
 def level4():
     """
-    In this challenge you have to work with UNIX permissions for directories, with multiple users.
-    You'll be given access to various user accounts, switch between them.
-    Solving this challenge will earn you a Guava.
+    Objective: read the copy of the flag.
+    A copy of the flag is in a file inside two nested directories under /tmp.
+    Three user accounts have been created; their credentials are printed below.
     """
 
     outer_temp_file = tempfile.mkdtemp(dir="/tmp")
@@ -265,13 +265,13 @@ def level4():
     shutil.chown(outer_temp_file, user="root", group=users[2][0])
     os.chmod(outer_temp_file, 0o551)
 
-    print("A copy of the flag has been placed somewhere in /tmp:")
-    os.system(f"/bin/ls -la /tmp")
+    print("A copy of the flag has been placed inside /tmp.")
 
 def level5():
     """
-    In this challenge you'll be answering questions about the category-based Bell–LaPadula model of Mandatory Access Control.
-    Answer the questions about the model to earn your Pineapple.
+    Objective: answer 5 questions about the Bell–LaPadula model (with categories)
+    correctly within 120 seconds. Answer each with yes or no.
+    One wrong answer ends the attempt.
     """
     mac_challenge(5, 120)
 
@@ -279,8 +279,7 @@ def challenge():
     challenge_level = globals()[f"level{level}"]
     description = textwrap.dedent(challenge_level.__doc__)
 
-    print("===== Welcome ! =====")
-    print("You have to work with various challenges to earn your delicious fruits.")
+    print("===== Lab Internal Exam =====")
     print()
     print(description)
     print()
