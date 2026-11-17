@@ -8,9 +8,22 @@ modules:
     name: Challenges
     challenges:
       - id: apple
-        name: Challenge 1
-        description: Can you win an apple? This challenge has grades.
+        name: Challenge 1 - Apple
       - id: banana
-        name: Challenge 2
+        name: Challenge 2 - Banana
       - id: papaya
-        name: Challenge 3
+        name: Challenge 3 - Papaya
+      - id: guava
+        name: Challenge 4 - Guava
+      - id: pineapple
+        name: Challenge 5 - Pineapple
+      - id: kiwi
+        name: Challenge 6 - Kiwi
+      - id: mango
+        name: Challenge 7 - Mango
+      - id: grapes
+        name: Challenge 8 - Grapes
+      - id: tomato
+        name: Challenge 9 - Tomato
+      - id: dragon-fruit
+        name: Challenge 10 - Dragon Fruit
