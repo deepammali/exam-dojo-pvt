@@ -3,7 +3,7 @@ This is the Lab Internal Exam for Semester-I
 Time limit: 1 Hour
 
 Instructions:
-1. **Before you start any challenge**, open this dojo's **Course** page, go to **Identity**, enter your **Roll Number** exactly (format `26-08-01`) and save it. Marks are only given if you enter your roll number.
+1. **Before you start any challenge**, open this dojo's **Course** page, go to **Identity**, enter your **Reg. Number** exactly (format `26-08-01`) and save it. Marks are only given if you enter your roll number.
 2. **To start a challenge:**
    1. Open the **Challenges** module, click a challenge to expand it, and click **Start**.
    2. Open the **Terminal** from the top bar. It connects to that challenge's machine.

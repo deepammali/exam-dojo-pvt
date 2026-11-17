@@ -1,4 +1,4 @@
 # Turns on the dojo's Course page.
 # Students enter their roll number under Course -> Identity.
 # Marks are calculated by grade.py (repo root).
-student_id: Roll Number
+student_id: Reg. Number

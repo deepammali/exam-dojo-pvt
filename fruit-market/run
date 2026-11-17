@@ -194,7 +194,7 @@ def level1():
     # subprocess.call(f"/bin/ls -la {flag_file}")
     # os.system(f"/bin/ls -la {flag_file}")
 
-def level2():
+def level4():
     """
     Objective: read /flag.
     The SETUID bit has been set on one program already installed on this system.
@@ -202,16 +202,16 @@ def level2():
     """
 
     # print("Before:")
-    # subprocess.call(f"/bin/ls -la /bin/less")
-    # os.system(f"/bin/ls -la /bin/less")
+    # subprocess.call(f"/bin/ls -la /bin/cat")
+    # os.system(f"/bin/ls -la /bin/cat")
 
-    os.chmod("/bin/less", 0o4755)
+    os.chmod("/bin/cat", 0o4755)
 
     # print("After:")
-    # subprocess.call(["/bin/ls", "-la", "/bin/less"])
-    # os.system(f"/bin/ls -la /bin/less")
+    # subprocess.call(["/bin/ls", "-la", "/bin/cat"])
+    # os.system(f"/bin/ls -la /bin/cat")
 
-def level3():
+def level6():
     """
     Objective: read /flag.
     A new group now owns /flag and the file's permissions have been changed.
@@ -238,7 +238,7 @@ def level3():
 
     print(f"The password for {new_group} is: {new_password}")
 
-def level4():
+def level12():
     """
     Objective: read the copy of the flag.
     A copy of the flag is in a file inside two nested directories under /tmp.
@@ -267,9 +267,9 @@ def level4():
 
     print("A copy of the flag has been placed inside /tmp.")
 
-def level5():
+def level16():
     """
-    Objective: answer 5 questions about the Bell–LaPadula model (with categories)
+    Objective: answer 5 questions about the Bell-LaPadula model (with categories)
     correctly within 120 seconds. Answer each with yes or no.
     One wrong answer ends the attempt.
     """
