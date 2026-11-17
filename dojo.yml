@@ -6,6 +6,9 @@ password: diatmt@26
 modules:
   - id: fruit-market
     name: Challenges
+    visibility:
+      start: "2026-11-18T10:00:00+05:30"
+      stop: "2026-11-18T12:00:00+05:30"
     challenges:
       - id: apple
         name: Challenge 1 - Apple
