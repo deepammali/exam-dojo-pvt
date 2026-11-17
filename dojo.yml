@@ -9,6 +9,7 @@ modules:
     challenges:
       - id: apple
         name: Challenge 1
+        description: Can you win an apple? This challenge has grades.
       - id: banana
         name: Challenge 2
       - id: papaya
