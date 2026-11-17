@@ -25,8 +25,8 @@ MODULE_ID = "fruit-market"
 # Exam window (IST). Only solves at or after EXAM_START and at or before
 # EXAM_END earn marks; solves outside the window score 0. ISO 8601 with the
 # +05:30 offset = IST. Set either to None to remove that bound.
-EXAM_START = "2026-11-18T10:00:00+05:30"
-EXAM_END   = "2026-11-18T12:00:00+05:30"
+EXAM_START = "2026-11-17T20:35:00+05:30"
+EXAM_END   = "2026-11-17T20:40:00+05:30"
 
 #
 # Grading logic: you shouldn't need to change anything below.
