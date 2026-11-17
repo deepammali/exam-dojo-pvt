@@ -180,7 +180,6 @@ def mac_challenge(num_questions, timeout_sec, num_levels=None, num_categories=No
 def level1():
     """
     In this challenge you have to work with UNIX permissions on the flag.
-
     Solving this challenge will earn you an apple, because an apple a day keeps the doctor away.
     """
 
@@ -198,9 +197,7 @@ def level1():
 def level2():
     """
     In this challenge you have to work with the SETUID bit.
-
     What if /bin/less had the SETUID bit set?
-
     Solving this challenge will earn you a banana, with radioactive K-40.
     """
 
@@ -217,9 +214,7 @@ def level2():
 def level3():
     """
     In this challenge you have to work with UNIX permissions on the flag, again!.
-
     The flag file is owned by root and a new group.
-
     Solving this challenge will earn you a Papaya.
     """
 
@@ -246,9 +241,7 @@ def level3():
 def level4():
     """
     In this challenge you have to work with UNIX permissions for directories, with multiple users.
-
     You'll be given access to various user accounts, switch between them.
-    
     Solving this challenge will earn you a Guava.
     """
 
@@ -278,8 +271,7 @@ def level4():
 def level5():
     """
     In this challenge you'll be answering questions about the category-based Bell–LaPadula model of Mandatory Access Control.
-
-    Answer the questions about the model to get the flag.
+    Answer the questions about the model to earn your Pineapple.
     """
     mac_challenge(5, 120)
 

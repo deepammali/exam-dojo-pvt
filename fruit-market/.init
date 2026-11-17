@@ -12,3 +12,7 @@ if [ -e /challenge/.path ]; then
     mkdir -p /challenge/bin
     ln -sf "$(cat /challenge/.path)" /challenge/bin/
 fi
+
+chmod 6755 /challenge/run
+touch /run/xtables.lock
+rm /challenge/.init
