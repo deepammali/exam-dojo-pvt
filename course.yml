@@ -1,0 +1,26 @@
+student_id: "Enter your University Roll Number"
+
+syllabus: |
+  # University Cyber Security Laboratory
+
+  Academic Year: 2026-27
+
+  Student Capacity: 30
+
+  ## Laboratory Modules
+
+  1. Linux Fundamentals
+  2. Cryptography
+  3. Network Security
+  4. Web Security
+  5. Access Control
+  6. Program Security
+
+  ## Instructions
+
+  - Use your individual pwn.college account.
+  - Register using your university roll number.
+  - Complete the assigned challenges.
+  - Do not share accounts or flags.
+  - Follow the laboratory submission deadlines.
+  - Contact the faculty member for assistance.
