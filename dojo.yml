@@ -1,14 +1,14 @@
 id: lab-2026
 name: Lab Internal Exam
 type: private
-image: pwncollege/challenge-legacy:latest
+# image: pwncollege/challenge-legacy:latest
 password: diatmt@26
 modules:
   - id: fruit-market
     name: Challenges
     challenges:
       - id: apple
-        name: apple
+        name: Challenge 1
         description: Can you win an apple? This challenge has grades.
       - id: banana
         name: Challenge 2
