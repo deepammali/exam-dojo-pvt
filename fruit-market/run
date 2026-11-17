@@ -209,7 +209,6 @@ def level4():
         shutil.copy("/bin/cat", reader)
     os.chown(reader, 0, 0)
     os.chmod(reader, 0o4755)
-    print(f"A SETUID-root file reader has been installed at: {reader}")
 
 def level6():
     """
