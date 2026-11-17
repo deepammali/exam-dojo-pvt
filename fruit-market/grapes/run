@@ -23,11 +23,11 @@ class ServerHost(Host):
             except ConnectionError:
                 continue
 
-unknown_ip = f"10.0.{random.randint(1, 15)}.{random.randint(1, 14)}"
+unknown_ip = f"10.0.0.{random.randint(2, 254)}"
 
 user_host = Host("ip-10-0-0-1", privileged_uid=parent_process.uids().effective)
 server_host = ServerHost("ip-10-0-?-?")
-network = Network(hosts={user_host: "10.0.0.1", server_host: unknown_ip}, subnet="10.0.0.0/28")
+network = Network(hosts={user_host: "10.0.0.1", server_host: unknown_ip}, subnet="10.0.0.0/24")
 network.run()
 
 user_host.interactive(environ=parent_process.environ())
