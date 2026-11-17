@@ -1,6 +1,6 @@
 id: lab-2026
 name: Lab Internal Exam
-# type: private
+type: private
 image: pwncollege/challenge-legacy:latest
 password: diatmt@26
 modules:
