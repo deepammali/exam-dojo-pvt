@@ -1,8 +1,8 @@
 id: lab-2026
 name: Lab Internal Exam
-type: private
+type: hidden
 image: pwncollege/challenge-legacy:latest
-password: diatmt@26
+password: vPXLzzuGgtCaPnOPcsUo2Jf9DqO4
 modules:
   - id: fruit-market
     name: Challenges
