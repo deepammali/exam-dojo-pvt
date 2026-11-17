@@ -270,10 +270,10 @@ def level12():
 def level16():
     """
     Objective: answer 5 questions about the Bell-LaPadula model (with categories)
-    correctly within 120 seconds. Answer each with yes or no.
+    correctly within 360 seconds. Answer each with yes or no.
     One wrong answer ends the attempt.
     """
-    mac_challenge(5, 120)
+    mac_challenge(5, 360)
 
 def challenge():
     challenge_level = globals()[f"level{level}"]
