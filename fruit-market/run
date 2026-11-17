@@ -197,19 +197,20 @@ def level1():
 def level4():
     """
     Objective: read /flag.
-    The SETUID bit has been set on one program already installed on this system.
-    /flag is readable only by root.
+    A file-reading program has been given the SETUID bit so that it runs as
+    root. /flag is readable only by root. Use the SETUID program to read it.
+    The exact path of the program is printed below when you run this challenge.
     """
-
-    # print("Before:")
-    # subprocess.call(f"/bin/ls -la /bin/cat")
-    # os.system(f"/bin/ls -la /bin/cat")
-
-    os.chmod("/bin/cat", 0o4755)
-
-    # print("After:")
-    # subprocess.call(["/bin/ls", "-la", "/bin/cat"])
-    # os.system(f"/bin/ls -la /bin/cat")
+    # On this image the setuid bit persists under /usr but not under /bin, and
+    # the plain reader in PATH (/run/dojo/bin) is a different, non-setuid copy.
+    # Prefer chmod-ing an existing /usr reader (proven to work); copy only if none.
+    reader = next((c for c in ("/usr/bin/cat", "/usr/bin/less") if os.path.exists(c)), None)
+    if reader is None:
+        reader = "/usr/bin/flagreader"
+        shutil.copy("/bin/cat", reader)
+    os.chown(reader, 0, 0)
+    os.chmod(reader, 0o4755)
+    print(f"A SETUID-root file reader has been installed at: {reader}")
 
 def level6():
     """
