@@ -1,0 +1,47 @@
+#!/usr/bin/exec-suid --real -- /usr/local/bin/python -I
+
+import os
+import flask
+import psutil
+from dojjail import Host, Network
+
+flag = open("/flag").read()
+parent_process = psutil.Process(os.getppid())
+
+INDEX = """<!doctype html>
+<html><head><title>Nowhereville Logistics</title></head>
+<body>
+  <h1>Nowhereville Logistics Pvt. Ltd.</h1>
+  <p>We move your world. Contact: info@nowhereville.example</p>
+  <!-- TODO: take down the old staging area before go-live -->
+</body></html>
+"""
+
+ROBOTS = "User-agent: *\nDisallow: /backup/\n"
+
+class WebHost(Host):
+    def entrypoint(self):
+        app = flask.Flask("corp")
+
+        @app.route("/")
+        def index():
+            return INDEX
+
+        @app.route("/robots.txt")
+        def robots():
+            return flask.Response(ROBOTS, mimetype="text/plain")
+
+        @app.route("/backup/")
+        def backup():
+            # an old backup page left exposed; the flag is sitting in a comment
+            return f"<!-- internal backup note: {flag} -->\n<p>Index of /backup/ (archived)</p>"
+
+        app.secret_key = os.urandom(8)
+        app.run("0.0.0.0", 80)
+
+user_host = Host("ip-10-0-0-1", privileged_uid=parent_process.uids().effective)
+web_host = WebHost("ip-10-0-0-2")
+network = Network(hosts={user_host: "10.0.0.1", web_host: "10.0.0.2"}, subnet="10.0.0.0/24")
+network.run()
+
+user_host.interactive(environ=parent_process.environ())

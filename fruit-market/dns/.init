@@ -1,0 +1,5 @@
+#!/bin/bash
+chmod 6755 /challenge/run 2>/dev/null
+touch /run/xtables.lock 2>/dev/null
+rm -f /challenge/.init
+exit 0

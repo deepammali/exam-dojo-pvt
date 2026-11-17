@@ -18,6 +18,8 @@ MARKS = {
     "tomato": 2,        # Q8  Sniffing Cookies
     "guava": 2,         # Q9  Access Control level12
     "dragon-fruit": 2,  # Q10 Intercept
+    "osint": 2,       # Q11 OSINT (optional extra)
+    "dns": 2,         # Q12 DNS  (optional extra)
 }
 
 MODULE_ID = "fruit-market"

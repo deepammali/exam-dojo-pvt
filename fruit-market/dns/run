@@ -1,0 +1,46 @@
+#!/usr/bin/exec-suid --real -- /usr/local/bin/python -I
+
+import os
+import socket
+import struct
+
+import psutil
+from dojjail import Host, Network
+
+flag = open("/flag").read().strip()
+parent_process = psutil.Process(os.getppid())
+
+def build_response(query, txt):
+    # Minimal DNS response: echo the question, add one TXT answer holding `txt`.
+    tid = query[:2]
+    idx = 12
+    while query[idx] != 0:            # walk past QNAME labels
+        idx += 1 + query[idx]
+    idx += 1                          # null label
+    question = query[12:idx + 4]      # QNAME + QTYPE + QCLASS
+    header = tid + struct.pack(">HHHHH", 0x8180, 1, 1, 0, 0)  # response, 1 answer
+    data = txt.encode()
+    rdata = b""
+    for i in range(0, len(data), 255):     # TXT = length-prefixed character-strings
+        chunk = data[i:i + 255]
+        rdata += bytes([len(chunk)]) + chunk
+    answer = b"\xc0\x0c" + struct.pack(">HHIH", 16, 1, 60, len(rdata)) + rdata  # name ptr, TYPE=TXT, IN, TTL
+    return header + question + answer
+
+class DNSHost(Host):
+    def entrypoint(self):
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        server_socket.bind(("0.0.0.0", 53))
+        while True:
+            try:
+                data, addr = server_socket.recvfrom(512)
+                server_socket.sendto(build_response(data, flag), addr)
+            except OSError:
+                continue
+
+user_host = Host("ip-10-0-0-1", privileged_uid=parent_process.uids().effective)
+dns_host = DNSHost("ip-10-0-0-2")
+network = Network(hosts={user_host: "10.0.0.1", dns_host: "10.0.0.2"}, subnet="10.0.0.0/24")
+network.run()
+
+user_host.interactive(environ=parent_process.environ())
