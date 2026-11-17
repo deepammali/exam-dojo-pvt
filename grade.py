@@ -13,14 +13,20 @@ MARKS = {
     "banana": 1,        # Q3  Access Control level4 (SETUID)
     "mango": 1,         # Q4  Firewall 1
     "papaya": 1,        # Q5  Access Control level6
-    "grapes": 3,        # Q6  Scan 2
-    "pineapple": 3,     # Q7  Access Control level16 (Bell-LaPadula)
-    "tomato": 3,        # Q8  Sniffing Cookies
-    "guava": 3,         # Q9  Access Control level12
-    "dragon-fruit": 3,  # Q10 Intercept
+    "grapes": 2,        # Q6  Scan 2
+    "pineapple": 2,     # Q7  Access Control level16 (Bell-LaPadula)
+    "tomato": 2,        # Q8  Sniffing Cookies
+    "guava": 2,         # Q9  Access Control level12
+    "dragon-fruit": 2,  # Q10 Intercept
 }
 
 MODULE_ID = "fruit-market"
+
+# Exam window (IST). Only solves at or after EXAM_START and at or before
+# EXAM_END earn marks; solves outside the window score 0. ISO 8601 with the
+# +05:30 offset = IST. Set either to None to remove that bound.
+EXAM_START = "2026-11-18T10:00:00+05:30"
+EXAM_END   = "2026-11-18T12:00:00+05:30"
 
 #
 # Grading logic: you shouldn't need to change anything below.
@@ -45,6 +51,9 @@ def grade(data):
     if any(field not in data for field in ["solves", "modules", "course"]):
         return None
 
+    start = parse_time(EXAM_START)
+    end = parse_time(EXAM_END)
+
     first_solve = {}
     for solve in data["solves"]:
         if solve["module_id"] != MODULE_ID:
@@ -68,6 +77,10 @@ def grade(data):
         earned = 0
         if solved_at is None:
             status = "Not solved"
+        elif start and solved_at < start:
+            status = f"Solved before window ({solved_at.astimezone(IST):%d %b %H:%M} IST)"
+        elif end and solved_at > end:
+            status = f"Solved after window ({solved_at.astimezone(IST):%d %b %H:%M} IST)"
         else:
             earned = max_marks
             status = f"Solved at {solved_at.astimezone(IST):%H:%M} IST"
@@ -77,7 +90,7 @@ def grade(data):
         # five columns by position (name, deadline, weight, progress, credit).
         assignments.append({
             "name": challenge.get("name", challenge_id),
-            "deadline": "-",
+            "deadline": EXAM_END or "-",
             "marks": max_marks,
             "progress": f"{status}: {fmt(earned)}/{fmt(max_marks)}",
             "credit": earned / max_marks if max_marks else 0,

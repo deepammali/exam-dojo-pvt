@@ -12,3 +12,4 @@ Instructions:
 
    Only one challenge runs at a time. Clicking **Start** on another challenge replaces the current one. Clicking **Start** again on the same challenge resets it.
 3. Always take screenshot, put in word document and prepare report simultaneously to save time.
+4. Submissions after 12 P.M. do not add into the scores.
