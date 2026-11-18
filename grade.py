@@ -56,14 +56,16 @@ def grade(data):
     start = parse_time(EXAM_START)
     end = parse_time(EXAM_END)
 
-    first_solve = {}
+    # Collect EVERY solve time per challenge. pwn.college records one solve per
+    # (user, challenge), and more than one account can be linked to the same
+    # reg number (e.g. a pre-exam test solve plus the student's real solve), so
+    # a challenge may have several solve times here. Do not take only the
+    # earliest: an out-of-window solve must never hide a valid in-window one.
+    solve_times = {}
     for solve in data["solves"]:
         if solve["module_id"] != MODULE_ID:
             continue
-        solved_at = parse_time(solve["timestamp"])
-        challenge_id = solve["challenge_id"]
-        if challenge_id not in first_solve or solved_at < first_solve[challenge_id]:
-            first_solve[challenge_id] = solved_at
+        solve_times.setdefault(solve["challenge_id"], []).append(parse_time(solve["timestamp"]))
 
     module = next((m for m in data["modules"] if m["id"] == MODULE_ID), {})
 
@@ -75,17 +77,18 @@ def grade(data):
         max_marks = MARKS.get(challenge_id, 0)
         max_total += max_marks
 
-        solved_at = first_solve.get(challenge_id)
+        times = sorted(solve_times.get(challenge_id, []))
+        windowed = [t for t in times if (not start or t >= start) and (not end or t <= end)]
         earned = 0
-        if solved_at is None:
+        if not times:
             status = "Not solved"
-        elif start and solved_at < start:
-            status = f"Solved before window ({solved_at.astimezone(IST):%d %b %H:%M} IST)"
-        elif end and solved_at > end:
-            status = f"Solved after window ({solved_at.astimezone(IST):%d %b %H:%M} IST)"
-        else:
+        elif windowed:
             earned = max_marks
-            status = f"Solved at {solved_at.astimezone(IST):%H:%M} IST"
+            status = f"Solved at {windowed[0].astimezone(IST):%H:%M} IST"
+        elif start and times[-1] < start:
+            status = f"Solved before window ({times[0].astimezone(IST):%d %b %H:%M} IST)"
+        else:
+            status = f"Solved after window ({times[-1].astimezone(IST):%d %b %H:%M} IST)"
         earned_total += earned
 
         # Key order matters: the admin "Download CSV" button reads these
