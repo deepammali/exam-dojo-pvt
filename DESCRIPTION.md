@@ -1,6 +1,7 @@
 This is the Lab Internal Exam for Semester-I
 
 Time limit: 1 Hour
+
 Total Marks: 15 
 
 Instructions:
