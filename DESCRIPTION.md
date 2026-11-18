@@ -1,6 +1,7 @@
 This is the Lab Internal Exam for Semester-I
 
 Time limit: 1 Hour
+Total Marks: 15 
 
 Instructions:
 1. **Before you start any challenge**, open this dojo's **Course** page (see below instructions), go to **Identity**, enter your **Reg. Number** exactly (format `xx-xx-xx`) and save it. Marks are only given if you enter your registration number.

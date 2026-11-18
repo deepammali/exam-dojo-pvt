@@ -37,9 +37,9 @@ modules:
         privileged: true
       # ===== OPTIONAL extra challenges (added for topic variety: OSINT + DNS).
       # ===== To REMOVE them from the exam, delete the 8 lines below.
-      - id: osint
-        name: Challenge 11 - OSINT
-        privileged: true
-      - id: dns
-        name: Challenge 12 - DNS
-        privileged: true
+      # - id: osint
+      #   name: Challenge 11 - OSINT
+      #   privileged: true
+      # - id: dns
+      #   name: Challenge 12 - DNS
+      #   privileged: true
